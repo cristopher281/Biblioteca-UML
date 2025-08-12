@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca de Derecho de la Universidad Martin Lutero Ocotal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Modo oscuro */
+        body.dark-mode {
+            background: linear-gradient(135deg, #23272f 0%, #181c22 100%);
+            color: #f8f9fa;
+        }
+        body.dark-mode header,
+        body.dark-mode footer {
+            background: linear-gradient(to right, #181c22, #003366);
+            color: #f8f9fa;
+        }
+        body.dark-mode .card {
+            background: #23272f;
+            color: #f8f9fa;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+        body.dark-mode .card-header {
+            background: #003366;
+        }
+        body.dark-mode .card-footer {
+            background: #222b36;
+        }
+        body.dark-mode .law-link {
+            color: #D4AF37;
+        }
+        body.dark-mode .law-link:hover {
+            color: #8B0000;
+        }
+        body.dark-mode .section-title h2 {
+            -webkit-text-fill-color: #D4AF37;
+        }
+        body.dark-mode .search-container input {
+            background: #23272f;
+            color: #f8f9fa;
+        }
+        body.dark-mode .search-container button {
+            background: #8B0000;
+        }
+        body.dark-mode .search-container button:hover {
+            background: #D4AF37;
+            color: #003366;
+        }
+        body.dark-mode .footer-links a {
+            color: #D4AF37;
+        }
+        body.dark-mode .footer-links a:hover {
+            color: #fff;
+        }
+        body.dark-mode .copyright {
+            color: #aaa;
+        }
+
+        /* Fondo sutil en secciones */
+        .container {
+            background: rgba(255,255,255,0.85);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+        }
+        body.dark-mode .container {
+            background: rgba(35,39,47,0.95);
+        }
+
+        /* Animaciones suaves */
+        .card, .card-img img, .law-link, .card-header, .card-footer, .section-title h2, .footer-links a, .search-container input, .search-container button {
+            transition: all 0.4s cubic-bezier(.4,0,.2,1);
+        }
+
+        /* Menú hamburguesa */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+        }
+        .hamburger span {
+            height: 4px;
+            width: 28px;
+            background: var(--accent);
+            margin: 3px 0;
+            border-radius: 2px;
+            display: block;
+            transition: all 0.4s cubic-bezier(.4,0,.2,1);
+        }
+        @media (max-width: 900px) {
+            .hamburger { display: flex; }
+            nav ul {
+                display: none;
+                flex-direction: column;
+                background: linear-gradient(to right, var(--primary), #001a33);
+                position: absolute;
+                top: 70px;
+                right: 0;
+                width: 220px;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+                border-radius: 0 0 0 18px;
+                z-index: 150;
+            }
+            nav ul.open {
+                display: flex;
+            }
+        }
+
+        /* Botón ir arriba */
+        #scrollTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            font-size: 1.7rem;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+        #scrollTopBtn:hover {
+            background: var(--accent);
+            color: var(--primary);
+            transform: translateY(-5px) scale(1.08);
+        }
+
+        /* Frases célebres */
+        .frase-celebre {
+            margin: 2.5rem auto 3.5rem auto;
+            max-width: 700px;
+            background: linear-gradient(90deg, #e3f2fd 60%, #fff 100%);
+            border-left: 6px solid var(--accent);
+            border-radius: 12px;
+            padding: 1.5rem 2.2rem;
+            font-style: italic;
+            font-size: 1.25rem;
+            color: var(--dark);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            position: relative;
+        }
+        .frase-celebre cite {
+            display: block;
+            margin-top: 1rem;
+            font-size: 1rem;
+            color: var(--secondary);
+            text-align: right;
+        }
+        body.dark-mode .frase-celebre {
+            background: linear-gradient(90deg, #23272f 60%, #181c22 100%);
+            color: #f8f9fa;
+        }
+
+        /* Filtros avanzados buscador */
+        .filtros-busqueda {
+            display: flex;
+            gap: 12px;
+            margin: 1rem 0 0.5rem 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .filtros-busqueda select {
+            padding: 7px 18px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+            background: #fff;
+            color: var(--primary);
+            transition: border 0.3s;
+        }
+        body.dark-mode .filtros-busqueda select {
+            background: #23272f;
+            color: #D4AF37;
+            border: 1px solid #444;
+        }
+
+        /* --- Estilo tipo periódico para Leyes más relevantes --- */
+        .periodico-section {
+          background: #f7f7f7;
+          padding: 2.5rem 1rem 2rem 1rem;
+          border-radius: 18px;
+          margin-bottom: 3rem;
+          box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+        }
+        .periodico-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+          gap: 2.2rem 2rem;
+        }
+        .periodico-noticia {
+          background: #fff;
+          border-radius: 12px;
+          box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+          padding: 1.7rem 1.5rem 1.3rem 1.5rem;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          border-left: 6px solid var(--primary);
+          transition: transform 0.18s, box-shadow 0.18s;
+        }
+        .periodico-noticia:hover {
+          transform: translateY(-6px) scale(1.02);
+          box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+        }
+        .periodico-destacada {
+          grid-column: span 2;
+          background: linear-gradient(90deg, #f5f5fa 60%, #e6eaff 100%);
+          border-left: 8px solid var(--accent);
+        }
+        .periodico-categoria {
+          font-size: 0.95rem;
+          color: #fff;
+          background: var(--primary);
+          display: inline-block;
+          padding: 0.25em 0.9em;
+          border-radius: 1em;
+          margin-bottom: 0.7em;
+          font-weight: 600;
+          letter-spacing: 0.03em;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+        .periodico-titulo {
+          font-size: 1.18rem;
+          color: var(--primary);
+          margin: 0 0 0.7em 0;
+          font-weight: 700;
+          line-height: 1.25;
+          display: flex;
+          align-items: center;
+          gap: 0.5em;
+        }
+        .periodico-resumen {
+          color: #444;
+          font-size: 1.01rem;
+          margin-bottom: 1.1em;
+          line-height: 1.5;
+        }
+        .periodico-link {
+          color: var(--accent);
+          font-weight: 600;
+          text-decoration: none;
+          font-size: 1.01rem;
+          transition: color 0.15s;
+        }
+        .periodico-link:hover {
+          color: var(--primary);
+          text-decoration: underline;
+        }
+        @media (max-width: 900px) {
+          .periodico-destacada {
+            grid-column: span 1;
+          }
+        }
+        @media (max-width: 600px) {
+          .periodico-section {
+            padding: 1.2rem 0.2rem;
+          }
+          .periodico-grid {
+            gap: 1.1rem 0.7rem;
+          }
+          .periodico-noticia {
+            padding: 1.1rem 0.7rem 0.8rem 0.7rem;
+          }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #003366;
+            --secondary: #8B0000;
+            --accent: #D4AF37;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-blue: #e3f2fd;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(90deg, #003366 0%, #7f53ac 100%);
+            color: #fff;
+            padding: 2em 0 1em 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            font-size: 2.5rem;
+            color: var(--accent);
+        }
+        
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        .logo-subtext {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 0;
+            position: relative;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+        }
+        
+        nav a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            bottom: 0;
+            left: 0;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover:after,
+        nav a.active:after {
+            width: 100%;
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem 5%;
+            position: relative;
+            color: white;
+            background: linear-gradient(rgba(0, 20, 40, 0.85), rgba(0, 20, 40, 0.9)), url('https://images.unsplash.com/photo-1507679799987-c73779587ccf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') center/cover;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+            z-index: 10;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            font-weight: 700;
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            max-width: 700px;
+            line-height: 1.6;
+        }
+        
+        .search-container {
+            max-width: 700px;
+            width: 100%;
+            margin: 2rem auto;
+            position: relative;
+        }
+        
+        .search-container input {
+            width: 100%;
+            padding: 18px 30px;
+            border-radius: 50px;
+            border: none;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.25);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        .search-container button {
+            position: absolute;
+            right: 8px;
+            top: 8px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .search-container button:hover {
+            background: #002244;
+            transform: translateY(-2px);
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            display: inline-block;
+            padding: 0 20px;
+            background: linear-gradient(to right, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, var(--accent), var(--secondary));
+            border-radius: 2px;
+        }
+        
+        /* Cards Layout */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 35px;
+            margin-bottom: 4rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-img {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+        
+        .card:hover .card-img img {
+            transform: scale(1.05);
+        }
+        
+        .card-header {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+        }
+        
+        .card-header h3 {
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+        }
+        
+        .card-header i {
+            color: var(--accent);
+        }
+        
+        .card-body {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .law-list {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+        
+        .law-list li {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+        }
+        
+        .law-list li:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .law-item {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+        
+        .law-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+        
+        .law-description {
+            font-size: 0.95rem;
+            color: var(--gray);
+            line-height: 1.5;
+        }
+        
+        .card-footer {
+            margin-top: auto;
+            padding: 15px 25px;
+            background: var(--light-blue);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .law-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .law-link:hover {
+            color: var(--secondary);
+        }
+        
+        .law-link i {
+            transition: all 0.3s ease;
+        }
+        
+        .law-link:hover i {
+            transform: translateX(5px);
+        }
+        
+        /* Footer */
+        footer {
+            background: linear-gradient(90deg, #003366 0%, #7f53ac 100%);
+            color: #fff;
+            text-align: center;
+            padding: 2em 0;
+            font-size: 1.1em;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+        }
+        
+        .footer-content-flex {
+            max-width: 900px;
+            margin: auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-info {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .footer-links-flex {
+            flex: 1;
+            min-width: 200px;
+            text-align: right;
+        }
+        
+        .footer-link {
+            color: #D4AF37;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+        
+        .footer-link:hover {
+            color: #fff;
+        }
+        
+        @media (max-width: 700px) {
+            .footer-content-flex { flex-direction: column; text-align: center; }
+            .footer-info, .footer-links-flex { text-align: center; }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            header {
+                flex-direction: column;
+                padding: 1rem;
+                text-align: center;
+            }
+            
+            .logo {
+                margin-bottom: 1rem;
+                justify-content: center;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            nav ul {
+                gap: 15px;
+            }
+        }
+
+        /* Botón cohete para leyes importantes - Glassmorphism y animación */
+        .rocket-leyes {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 54px;
+          height: 54px;
+          min-width: 54px;
+          min-height: 54px;
+          background: rgba(255,255,255,0.55);
+          border: 2.5px solid #8ec5fc;
+          border-radius: 50%;
+          cursor: pointer;
+          margin-left: 12px;
+          margin-bottom: -8px;
+          vertical-align: middle;
+          box-shadow: 0 4px 18px #8ec5fc55, 0 1px 8px #7f53ac22;
+          position: relative;
+          transition: background 0.25s, border 0.25s, box-shadow 0.25s, transform 0.18s;
+          -webkit-backdrop-filter: blur(6px) saturate(1.2);
+          backdrop-filter: blur(6px) saturate(1.2);
+          outline: none;
+          z-index: 2;
+          overflow: visible;
+        }
+        .rocket-leyes svg {
+          width: 32px;
+          height: 32px;
+          display: block;
+          margin: 0 auto;
+          transition: transform 0.4s cubic-bezier(.23,1.02,.64,1);
+        }
+        .rocket-leyes.active svg {
+          transform: translateY(-12px) scale(1.15) rotate(-8deg);
+          filter: drop-shadow(0 8px 18px #8ec5fc88);
+        }
+        .rocket-leyes:focus {
+          box-shadow: 0 0 0 3px #8ec5fc88;
+        }
+        .rocket-leyes:after {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; width: 100%; height: 100%;
+          border-radius: 50%;
+          pointer-events: none;
+          box-shadow: 0 0 18px 2px #8ec5fc44 inset;
+          opacity: 0.5;
+          transition: opacity 0.2s;
+        }
+        .rocket-leyes .flame {
+          position: absolute;
+          bottom: 6px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 16px;
+          height: 16px;
+          z-index: 1;
+          opacity: 0;
+          transition: opacity 0.3s;
+        }
+        .rocket-leyes.active .flame {
+          opacity: 1;
+          animation: flameRocket 0.6s infinite alternate;
+        }
+        @keyframes flameRocket {
+          0% { filter: blur(0px) brightness(1.1); }
+          100% { filter: blur(2px) brightness(1.5); }
+        }
+    </style>
+</head>
+<body>
+    <style>
+    /* --- DISEÑO INNOVADOR BIBLIOTECA DIGITAL --- */
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #e9e7f7 0%, #d1f2f7 100%), url('https://www.transparenttextures.com/patterns/diamond-upholstery.png');
+      background-blend-mode: lighten;
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      color: #2a2a2a;
+      position: relative;
+      overflow-x: hidden;
+    }
+    .container, .periodico-section {
+      background: rgba(255,255,255,0.55);
+      border-radius: 22px;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+      margin-bottom: 2.5rem;
+      padding: 2.2rem 2.2rem 2.2rem 2.2rem;
+      border: 1.5px solid rgba(255,255,255,0.25);
+      backdrop-filter: blur(7px) saturate(1.2);
+      -webkit-backdrop-filter: blur(7px) saturate(1.2);
+      transition: box-shadow 0.3s, background 0.3s;
+    }
+    .section-title h2, .section-title h3, .periodico-titulo, .card-header h3 {
+      font-family: 'Unbounded', 'Merriweather', 'Georgia', serif;
+      color: #3a2e6c;
+      letter-spacing: 1.2px;
+      background: linear-gradient(90deg, #e0c3fc 0%, #8ec5fc 100%);
+      border-left: 8px solid #7f53ac;
+      padding: 0.3em 1.1em;
+      border-radius: 0 16px 16px 0;
+      box-shadow: 0 2px 12px 0 rgba(120, 90, 200, 0.10);
+      margin-bottom: 1.1em;
+      display: inline-block;
+      font-weight: 800;
+      text-shadow: 0 2px 8px #fff8, 0 1px 0 #fff;
+    }
+    .periodico-noticia, .card {
+      background: rgba(255,255,255,0.65);
+      border-radius: 18px;
+      border: 1.5px solid rgba(200,200,255,0.18);
+      box-shadow: 0 4px 24px 0 rgba(120, 90, 200, 0.10);
+      margin-bottom: 1.2em;
+      transition: box-shadow 0.3s, transform 0.2s, background 0.3s;
+      backdrop-filter: blur(4px) saturate(1.1);
+      -webkit-backdrop-filter: blur(4px) saturate(1.1);
+      position: relative;
+      overflow: hidden;
+      animation: floatIn 0.7s cubic-bezier(.23,1.02,.64,1) both;
+    }
+    .periodico-noticia:hover, .card:hover {
+      box-shadow: 0 12px 36px 0 rgba(120, 90, 200, 0.18);
+      transform: translateY(-6px) scale(1.025);
+      background: rgba(255,255,255,0.85);
+    }
+    @keyframes floatIn {
+      0% { opacity: 0; transform: translateY(40px) scale(0.98); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .periodico-categoria, .law-list .law-title {
+      font-family: 'Unbounded', 'Merriweather', 'Georgia', serif;
+      color: #7f53ac;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-size: 1.05em;
+      margin-bottom: 0.3em;
+    }
+    .periodico-link, .law-link {
+      background: linear-gradient(90deg, #8ec5fc 0%, #e0c3fc 100%);
+      color: #3a2e6c;
+      border-radius: 8px;
+      padding: 8px 22px;
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow: 0 1px 8px 0 rgba(120, 90, 200, 0.10);
+      transition: background 0.2s, color 0.2s;
+      border: none;
+      font-size: 1.08em;
+    }
+    .periodico-link:hover, .law-link:hover {
+      background: linear-gradient(90deg, #7f53ac 0%, #8ec5fc 100%);
+      color: #fff;
+    }
+    .card-img img, .periodico-noticia img {
+      border-radius: 12px;
+      border: 2px solid #e0c3fc;
+      box-shadow: 0 2px 12px 0 rgba(120, 90, 200, 0.13);
+      filter: saturate(1.1) contrast(1.05);
+      transition: filter 0.2s;
+    }
+    .card-img img:hover, .periodico-noticia img:hover {
+      filter: saturate(1.3) contrast(1.15) brightness(1.08);
+    }
+    /* Separadores decorativos con efecto neón */
+    .section-title:after {
+      content: '\f02d';
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+      color: #8ec5fc;
+      margin-left: 16px;
+      font-size: 1.3em;
+      vertical-align: middle;
+      text-shadow: 0 0 8px #8ec5fc88, 0 0 2px #fff;
+    }
+    /* Efecto de estante superior digital */
+    header {
+      background: linear-gradient(90deg, #8ec5fc 60%, #e0c3fc 100%);
+      box-shadow: 0 4px 24px 0 rgba(120, 90, 200, 0.13);
+      border-bottom: 5px solid #7f53ac;
+      position: relative;
+      z-index: 10;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Unbounded', 'Merriweather', 'Georgia', serif;
+      font-size: 1.5em;
+      color: #3a2e6c;
+      text-shadow: 0 2px 8px #fff8;
+    }
+    .logo-icon {
+      font-size: 2.2em;
+      color: #7f53ac;
+      filter: drop-shadow(0 2px 8px #e0c3fc88);
+    }
+    .logo-text {
+      font-weight: 900;
+      letter-spacing: 1.5px;
+    }
+    .logo-subtext {
+      font-size: 0.7em;
+      color: #7f53ac;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+    }
+    /* Footer digital */
+    footer {
+      background: linear-gradient(90deg, #8ec5fc 60%, #e0c3fc 100%);
+      color: #3a2e6c;
+      border-top: 5px solid #7f53ac;
+      font-family: 'Unbounded', 'Merriweather', 'Georgia', serif;
+      box-shadow: 0 -2px 18px 0 #e0c3fc55;
+    }
+    /* Scrollbar personalizado digital */
+    ::-webkit-scrollbar {
+      width: 13px;
+      background: #e0c3fc;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #8ec5fc;
+      border-radius: 7px;
+      box-shadow: 0 0 8px #7f53ac55;
+    }
+    /* Animación de fondo sutil */
+    body:before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: radial-gradient(circle at 80% 20%, #e0c3fc55 0%, transparent 60%),
+                  radial-gradient(circle at 20% 80%, #8ec5fc55 0%, transparent 60%);
+      z-index: 0;
+      pointer-events: none;
+      animation: bgMove 12s linear infinite alternate;
+    }
+    @keyframes bgMove {
+      0% { background-position: 80% 20%, 20% 80%; }
+      100% { background-position: 60% 40%, 40% 60%; }
+    }
+    /* Botón scroll arriba con efecto glass */
+    #scrollTopBtn {
+      background: rgba(255,255,255,0.7);
+      border: 2px solid #8ec5fc;
+      color: #7f53ac;
+      box-shadow: 0 2px 12px #8ec5fc55;
+      border-radius: 50%;
+      font-size: 1.5em;
+      transition: background 0.2s, color 0.2s;
+    }
+    #scrollTopBtn:hover {
+      background: #8ec5fc;
+      color: #fff;
+    }
+    /* Fuente Unbounded para títulos */
+    @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&display=swap');
+    </style>
+    <!-- Header -->
+    <header>
+        <div class="hamburger" id="hamburger-menu" title="Abrir menú">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="logo">
+            <i class="fas fa-balance-scale logo-icon"></i>
+            <div>
+                <div class="logo-text">Biblioteca Juridica de Derecho</div>
+                <div class="logo-subtext">República de Nicaragua</div>
+            </div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#" class="active">Inicio</a></li>
+                <li><a href="#constitucional">Constitucional</a></li>
+                <li><a href="#civil">Civil</a></li>
+                <li><a href="#penal">Penal</a></li>
+                <li><a href="#procesal">Procesal</a></li>
+                <li><a href="#laboral">Laboral</a></li>
+                <li><a href="#administrativo">Administrativo</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Biblioteca Jurídica Virtual</h1>
+            <p>Recurso oficial para consulta de legislación nacional, jurisprudencia y doctrina legal</p>
+            
+            <div class="filtros-busqueda">
+                <label for="filtro-categoria" class="label-categoria">Categoría:</label>
+                <select id="filtro-categoria" title="Filtrar por categoría">
+                    <option value="">Todas las categorías</option>
+                    <option value="constitucional">Constitucional</option>
+                    <option value="civil">Civil</option>
+                    <option value="penal">Penal</option>
+                    <option value="procesal">Procesal</option>
+                    <option value="laboral">Laboral</option>
+                    <option value="administrativo">Administrativo</option>
+                    <option value="jurisprudencia">Jurisprudencia</option>
+                </select>
+            </div>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Buscar ley, código o documento jurídico...">
+                <button id="search-button"><i class="fas fa-search"></i> Buscar</button>
+                <button id="back-button" class="back-button" title="Regresar">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+            </div>
+            <div id="search-results"></div>
+        
+    </section>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Leyes más relevantes de Nicaragua -->
+                <div class="section-title" id="leyes-relevantes">
+                    <div class="leyes-relevantes-header">
+                        <h2 class="leyes-relevantes-titulo">Leyes más relevantes de Nicaragua</h2>
+            <button id="toggleLeyesBtn" class="rocket-leyes" title="Mostrar/Ocultar leyes" aria-label="Mostrar/Ocultar leyes" tabindex="0">
+              <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 2 C19 2 24 8 24 16 C24 24 19 30 16 30 C13 30 8 24 8 16 C8 8 13 2 16 2 Z" fill="#8ec5fc" stroke="#7f53ac" stroke-width="2"/>
+                <circle cx="16" cy="16" r="4" fill="#fff" stroke="#7f53ac" stroke-width="1.5"/>
+                <rect x="14" y="26" width="4" height="6" rx="2" fill="#e0c3fc" stroke="#7f53ac" stroke-width="1"/>
+              </svg>
+              <div class="flame">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <ellipse cx="8" cy="8" rx="7" ry="4" fill="orange" fill-opacity="0.7"/>
+                  <ellipse cx="8" cy="10" rx="5" ry="2" fill="yellow" fill-opacity="0.6"/>
+                </svg>
+              </div>
+            </button>
+          </div>
+        </div>
+    <div class="leyes-relevantes-wrapper">
+    <section class="periodico-section leyes-importantes-oculta" id="leyesImportantesSection">
+    .leyes-importantes-oculta {
+        display: none;
+    }
+    .leyes-relevantes-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    .leyes-relevantes-titulo {
+        margin: 0;
+    }
+    .leyes-relevantes-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        justify-content: center;
+        margin-bottom: 3rem;
+    }
+            <div class="periodico-grid">
+                <article class="periodico-noticia periodico-destacada">
+                    <div class="periodico-categoria">Constitucional</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-landmark"></i> Constitución Política de la República de Nicaragua</h3>
+                    <p class="periodico-resumen">Norma suprema que establece la organización del Estado, los derechos y deberes fundamentales de los ciudadanos y la estructura de los poderes públicos.</p>
+                    <a href="https://www.asamblea.gob.ni/assets/constitucion.pdf" target="_blank" rel="noopener" class="periodico-link">Ver Constitución en PDF <i class="fas fa-file-pdf"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Laboral</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-users"></i> Código del Trabajo</h3>
+                    <p class="periodico-resumen">Regula las relaciones laborales, los derechos y obligaciones de empleadores y trabajadores, y la protección social.</p>
+                    <a href="http://legislacion.asamblea.gob.ni/Normaweb.nsf/(All)/FA251B3C54F5BAEF062571C40055736C?OpenDocument" target="_blank" rel="noopener" class="periodico-link">Ver Código del Trabajo en línea <i class="fas fa-external-link-alt"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Civil</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-balance-scale"></i> Código Civil</h3>
+                    <p class="periodico-resumen">Regula las relaciones jurídicas entre particulares, incluyendo contratos, propiedad, familia y sucesiones.</p>
+                    <a href="http://legislacion.asamblea.gob.ni/Normaweb.nsf/($All)/2EE770725DC6A5FD062584C1005E7DE7" target="_blank" rel="noopener" class="periodico-link">Ver Código Civil en línea <i class="fas fa-external-link-alt"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Penal</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-gavel"></i> Código Penal</h3>
+                    <p class="periodico-resumen">Define los delitos y establece las penas aplicables, así como los principios del derecho penal nicaragüense.</p>
+                    <a href="http://legislacion.asamblea.gob.ni/Normaweb.nsf/%28%24All%29/1F5B59264A8F00F906257540005EF77E?OpenDocument" target="_blank" rel="noopener" class="periodico-link">Ver Código Penal en línea <i class="fas fa-external-link-alt"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Procesal</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-balance-scale"></i> Código Procesal Civil</h3>
+                    <p class="periodico-resumen">Regula los procedimientos judiciales en materia civil, garantizando el acceso a la justicia y el debido proceso.</p>
+                    <a href="http://legislacion.asamblea.gob.ni/Diariodebate.nsf/76ed72912dd57e570625698c00773f5d/a0e21e4658aab00506257e7500633eec" target="_blank" rel="noopener" class="periodico-link">Ver Código Procesal Civil en línea <i class="fas fa-external-link-alt"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Procesal</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-gavel"></i> Código Procesal Penal</h3>
+                    <p class="periodico-resumen">Establece el procedimiento para la investigación y juzgamiento de los delitos en Nicaragua.</p>
+                    <a href="https://www.oas.org/juridico/spanish/mesicic3_nic_procesal.pdf" target="_blank" rel="noopener" class="periodico-link">Ver Código Procesal Penal en PDF <i class="fas fa-file-pdf"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Laboral</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-briefcase"></i> Ley de Seguridad Social</h3>
+                    <p class="periodico-resumen">Establece el sistema de protección social para los trabajadores y sus familias en Nicaragua.</p>
+                    <a href="http://legislacion.asamblea.gob.ni/normaweb.nsf/9e314815a08d4a6206257265005d21f9/06c71def081a6d6306258800004d4c07?OpenDocument" target="_blank" rel="noopener" class="periodico-link">Ver Ley de Seguridad Social en línea <i class="fas fa-external-link-alt"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Civil</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-archive"></i> Ley Nº. 698, Ley General de los Registros Públicos</h3>
+                    <p class="periodico-resumen">Regula la organización y funcionamiento de los registros públicos.</p>
+                    <a href="https://share.google/DOfnIwR3HyCOZMF33" target="_blank" rel="noopener" class="periodico-link">Ver Ley Nº. 698 <i class="fas fa-external-link-alt"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Laboral</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-hard-hat"></i> Ley General de Higiene y Seguridad del Trabajo</h3>
+                    <p class="periodico-resumen">Normas para garantizar condiciones laborales seguras y saludables.</p>
+                    <a href="https://share.google/RIi6Kf8vlsJHDNjQm" target="_blank" rel="noopener" class="periodico-link">Ver Ley General de Higiene y Seguridad del Trabajo <i class="fas fa-external-link-alt"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Constitucional</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-balance-scale"></i> Ley de Justicia Constitucional</h3>
+                    <p class="periodico-resumen">Regula el control de constitucionalidad y la protección de derechos fundamentales.</p>
+                    <a href="https://share.google/px8jDdSnLqBwrgoRT" target="_blank" rel="noopener" class="periodico-link">Ver Ley de Justicia Constitucional <i class="fas fa-external-link-alt"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Constitucional</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-exclamation-triangle"></i> Ley de Emergencia Nacional</h3>
+                    <p class="periodico-resumen">Establece los procedimientos y facultades del gobierno en situaciones de emergencia nacional.</p>
+                    <a href="https://share.google/px8jDdSnLqBwrgoRT" target="_blank" rel="noopener" class="periodico-link">Ver Ley de Emergencia <i class="fas fa-external-link-alt"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Civil</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-landmark"></i> Ley Creadora del Instituto de la Propiedad</h3>
+                    <p class="periodico-resumen">Institución encargada de la administración de la propiedad pública y privada.</p>
+                    <a href="https://share.google/SXbaTW1rSye80l2Wx" target="_blank" rel="noopener" class="periodico-link">Ver Ley Creadora del Instituto de la Propiedad <i class="fas fa-external-link-alt"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Laboral</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-globe"></i> Ratificación de Convenios de la OIT</h3>
+                    <p class="periodico-resumen">Ratificación de tratados internacionales laborales.</p>
+                    <a href="https://share.google/hK0S2u82tzaJ1m1ZW" target="_blank" rel="noopener" class="periodico-link">Ver Convenios OIT <i class="fas fa-external-link-alt"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Civil</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-landmark"></i> Ley Creadora del Instituto de la Propiedad Reformada Urbana y Rural</h3>
+                    <p class="periodico-resumen">Instituto encargado de la administración de la propiedad reformada.</p>
+                    <a href="https://share.google/jZlO1e3nSg8n61RoL" target="_blank" rel="noopener" class="periodico-link">Ver Ley del Instituto de la Propiedad Reformada <i class="fas fa-external-link-alt"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Penal</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-user-secret"></i> Ley de Prevención, Investigación y Persecución del Crimen Organizado (Ley N° 735)</h3>
+                    <p class="periodico-resumen">Normativa para combatir el crimen organizado y administrar bienes incautados.</p>
+                    <a href="https://share.google/o51SkDOAvS8AC83Pz" target="_blank" rel="noopener" class="periodico-link">Ver Ley N° 735 <i class="fas fa-external-link-alt"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Procesal</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-handshake"></i> Ley de Mediación y Arbitraje</h3>
+                    <p class="periodico-resumen">Regula métodos alternativos de resolución de conflictos.</p>
+                    <a href="https://share.google/bgrZSXZxRpoypwrgG" target="_blank" rel="noopener" class="periodico-link">Ver Ley de Mediación y Arbitraje <i class="fas fa-external-link-alt"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Civil</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-file-alt"></i> Ley N° 974</h3>
+                    <p class="periodico-resumen">Normativa relevante del marco jurídico nicaragüense.</p>
+                    <a href="https://share.google/pTdmmjIyJuhuencQ8" target="_blank" rel="noopener" class="periodico-link">Ver Ley N° 974 <i class="fas fa-external-link-alt"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Laboral</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-briefcase"></i> Ley 737 del Sector Público</h3>
+                    <p class="periodico-resumen">Regula el empleo público y la función pública en Nicaragua.</p>
+                    <a href="https://share.google/px8jDdSnLqBwrgoRT" target="_blank" rel="noopener" class="periodico-link">Ver Ley 737 <i class="fas fa-external-link-alt"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Civil</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-university"></i> Ley General de Bancos</h3>
+                    <p class="periodico-resumen">Regula el sistema bancario y financiero nacional.</p>
+                    <a href="https://share.google/GxCGGIJFfDwkt2eZT" target="_blank" rel="noopener" class="periodico-link">Ver Ley General de Bancos <i class="fas fa-external-link-alt"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Laboral</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-users"></i> Código del Trabajo (Enlace alternativo)</h3>
+                    <p class="periodico-resumen">Normativa laboral fundamental para Nicaragua.</p>
+                    <a href="https://share.google/f8HjGKdSshATtZy2R" target="_blank" rel="noopener" class="periodico-link">Ver Código del Trabajo <i class="fas fa-external-link-alt"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Penal</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-balance-scale"></i> Ley 350 Regulación de la Jurisdicción de lo Contencioso Administrativo</h3>
+                    <p class="periodico-resumen">Normativa sobre la jurisdicción administrativa en Nicaragua.</p>
+                    <a href="https://share.google/efEMABlSkHVU0Fwkb" target="_blank" rel="noopener" class="periodico-link">Ver Ley 350 <i class="fas fa-external-link-alt"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Penal</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-user-shield"></i> Ley 438 de Propiedad de los Servidores Públicos</h3>
+                    <p class="periodico-resumen">Regula la propiedad de los funcionarios públicos.</p>
+                    <a href="https://share.google/qps7w16lP46wu3BY4" target="_blank" rel="noopener" class="periodico-link">Ver Ley 438 <i class="fas fa-external-link-alt"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Penal</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-exclamation-triangle"></i> Ley de Emergencia</h3>
+                    <p class="periodico-resumen">Establece procedimientos y facultades en situaciones de emergencia nacional.</p>
+                    <a href="https://share.google/px8jDdSnLqBwrgoRT" target="_blank" rel="noopener" class="periodico-link">Ver Ley de Emergencia <i class="fas fa-external-link-alt"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Civil</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-child"></i> Código de la Niñez y la Adolescencia</h3>
+                    <p class="periodico-resumen">Protección integral de los derechos de la niñez y adolescencia.</p>
+                    <a href="https://share.google/uIpI395sjiVXYdeMI" target="_blank" rel="noopener" class="periodico-link">Ver Código de la Niñez y la Adolescencia <i class="fas fa-file-pdf"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Municipal</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-landmark"></i> Ley de Municipios</h3>
+                    <p class="periodico-resumen">Normativa que regula la organización, funcionamiento y competencias de los gobiernos municipales.</p>
+                    <a href="http://legislacion.asamblea.gob.ni/normaweb.nsf/3133c0d121ea3897062568a1005e0f89/67cc56a8b80761da0625886f006dcdbc?OpenDocument" target="_blank" rel="noopener" class="periodico-link">Ver Ley de Municipios en línea <i class="fas fa-external-link-alt"></i></a>
+                </article>
+                <article class="periodico-noticia">
+                    <div class="periodico-categoria">Patrimonio</div>
+                    <h3 class="periodico-titulo"><i class="fas fa-shield-alt"></i> Ley de Defensa del Patrimonio Nacional</h3>
+                    <p class="periodico-resumen">Normativa que protege y regula el patrimonio nacional de Nicaragua, asegurando su conservación y defensa jurídica.</p>
+                    <a href="https://nicaragua.justia.com/nacionales/leyes/ley-de-defensa-del-patrimonio-nacional-jul-31-2017/gdoc/" target="_blank" rel="noopener" class="periodico-link">Ver Ley de Defensa del Patrimonio Nacional <i class="fas fa-external-link-alt"></i></a>
+                </article>
+            </div>
+        </section>
+        <div class="section-title" id="constitucional">
+            <h2>Derecho Constitucional</h2>
+        </div>
+        <div class="cards-container">
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1589391886645-d51941baf7fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80" alt="Derecho Constitucional">
+                </div>
+                <div class="card-header">
+                    <h3><i class="fas fa-book"></i> Legislación Fundamental</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="law-list">
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Constitución Política de Nicaragua</div>
+                                <div class="law-description">Carta Magna que establece los principios fundamentales del Estado nicaragüense, los derechos y deberes de los ciudadanos, y la estructura de los poderes públicos.</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Ley de Justicia Constitucional</div>
+                                <div class="law-description">Regula el funcionamiento de la Corte Suprema de Justicia en materia constitucional y los procesos de control de constitucionalidad.</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Ley de Emergencia Nacional</div>
+                                <div class="law-description">Establece los procedimientos y facultades del gobierno en situaciones de emergencia nacional.</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Ley Electoral</div>
+                                <div class="law-description">Regula los procesos electorales, los derechos políticos de los ciudadanos y la organización del Consejo Supremo Electoral.</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a href="https://www.asamblea.gob.ni/" target="_blank" rel="noopener" class="law-link">
+                        Ver en Asamblea Nacional <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-img">
+                        <img src="derecho.png/Imagen de WhatsApp 2025-08-02 a las 21.30.25_122bcb70.jpg" alt="Imagen de WhatsApp Jurisprudencia Nueva">
+                        <img src="imagenes de derecho.png/Imagen de WhatsApp 2025-08-02 a las 21.30.25_427914a2.jpg" alt="Imagen de WhatsApp" alt="Jurisprudencia">
+                </div>
+                <div class="card-header">
+                    <h3><i class="fas fa-gavel"></i> Jurisprudencia</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="law-list">
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Sentencias Constitucionales</div>
+                                <div class="law-description">Colección de las decisiones más relevantes de la Corte Suprema en materia constitucional.</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Interpretaciones Constitucionales</div>
+                                <div class="law-description">Análisis y explicaciones sobre la aplicación de los principios constitucionales en casos específicos.</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Derechos Fundamentales</div>
+                                <div class="law-description">Estudios y jurisprudencia sobre la protección y garantía de los derechos fundamentales.</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Control de Constitucionalidad</div>
+                                <div class="law-description">Mecanismos y procedimientos para garantizar la supremacía constitucional.</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a href="https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwiur97okYSPAxWPSzABHaa-McgQFnoECBgQAQ&url=https%3A%2F%2Fwww.poderjudicial.gob.ni%2F&usg=AOvVaw3JAT_SNKDgdTa7qv9xsExZ&opi=89978449" target="_blank" rel="noopener" class="law-link">
+                        Ver en Corte Suprema <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Derecho Civil -->
+        <div class="section-title" id="civil">
+            <h2>Derecho Civil</h2>
+        </div>
+        <div class="cards-container">
+            <div class="card">
+                <div class="card-img">
+                        <img src="derecho.png/Imagen de WhatsApp 2025-08-02 a las 21.43.27_ce45bb4f.jpg" alt="Legislación Civil Nueva">
+                        <img src="imagenes de derecho.png/Imagen de WhatsApp 2025-08-02 a las 21.43.27_e5724959.jpg" alt="Legislación Civil">
+                </div>
+                <div class="card-header">
+                    <h3><i class="fas fa-home"></i> Legislación Civil</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="law-list">
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Código Civil de Nicaragua</div>
+                                <div class="law-description">Regula las relaciones jurídicas entre personas privadas, incluyendo derechos de propiedad, contratos, obligaciones y familia.</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Ley de Registro Público</div>
+                                <div class="law-description">Establece la organización y funcionamiento del sistema de registro de propiedades y otros derechos reales.</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Ley de Propiedad</div>
+                                <div class="law-description">Regula los derechos de propiedad urbana y rural, incluyendo las disposiciones sobre reforma agraria.</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Ley de Arrendamiento Urbano</div>
+                                <div class="law-description">Normativa que regula las relaciones entre arrendadores y arrendatarios de inmuebles urbanos.</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a href="https://www.poderjudicial.gob.ni/" target="_blank" rel="noopener" class="law-link">
+                        Ver en Poder Judicial <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80" alt="Familia y Sucesiones">
+                </div>
+                <div class="card-header">
+                    <h3><i class="fas fa-users"></i> Familia y Sucesiones</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="law-list">
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Ley de Alimentos</div>
+                                <div class="law-description">Regula las obligaciones alimentarias entre parientes y los procedimientos para su cumplimiento.</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Ley de Adopción</div>
+                                <div class="law-description">Establece los procedimientos y requisitos para la adopción de menores en Nicaragua.</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Ley de Sucesiones</div>
+                                <div class="law-description">Normativa que regula la transmisión de bienes, derechos y obligaciones tras el fallecimiento de una persona.</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Ley de Divorcio</div>
+                                <div class="law-description">Regula los procedimientos y efectos jurídicos de la disolución del vínculo matrimonial.</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="law-link">
+                        Documentos disponibles <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Derecho Penal -->
+        <div class="section-title" id="penal">
+            <h2>Derecho Penal</h2>
+        </div>
+        <div class="cards-container">
+            <div class="card">
+                <div class="card-img">
+                        <img src="derecho.png/Imagen de WhatsApp 2025-08-02 a las 21.27.46_b4e773e3.jpg" alt="Legislación Penal Nueva">
+                        <img src="imagenes de derecho.png/Imagen de WhatsApp 2025-08-02 a las 21.27.46_accf081b.jpg" alt="Legislación Penal">
+                </div>
+                <div class="card-header">
+                    <h3><i class="fas fa-handcuffs"></i> Legislación Penal</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="law-list">
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Código Penal</div>
+                                <div class="law-description">Recopilación de normas que definen los delitos y establecen las penas correspondientes.</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Código Procesal Penal</div>
+                                <div class="law-description">Regula el procedimiento para la investigación y juzgamiento de los delitos.</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Ley del Régimen Penitenciario</div>
+                                <div class="law-description">Establece la organización y funcionamiento del sistema penitenciario nacional.</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Ley de Ejecución Penal</div>
+                                <div class="law-description">Regula la ejecución de las penas y medidas de seguridad impuestas por los tribunales.</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a href="https://www.migob.gob.ni/" target="_blank" rel="noopener" class="law-link">
+                        Ver en Ministerio de Gobernación <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-img">
+                        <img src="derecho.png/Imagen de WhatsApp 2025-08-11 a las 19.25.27_bd774d9d.jpg" alt="Delitos Específicos">
+                </div>
+                <div class="card-header">
+                    <h3><i class="fas fa-shield-alt"></i> Delitos Específicos</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="law-list">
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Ley contra Crimen Organizado</div>
+                                <div class="law-description">Normativa especial para prevenir, investigar y perseguir el crimen organizado.</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Ley contra la Violencia hacia la Mujer</div>
+                                <div class="law-description">Protección integral para prevenir, sancionar y erradicar la violencia contra las mujeres.</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Ley de Tráfico Ilícito de Drogas</div>
+                                <div class="law-description">Regula la prevención, investigación y sanción de los delitos relacionados con drogas.</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Ley de Lavado de Dinero</div>
+                                <div class="law-description">Establece medidas para prevenir, detectar y sancionar el lavado de dinero y financiamiento al terrorismo.</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="law-link">
+                        Documentos disponibles <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Derecho Laboral y Seguridad Social -->
+        <div class="section-title" id="laboral">
+            <h2>Derecho Laboral y Seguridad Social</h2>
+        </div>
+        <div class="cards-container">
+            <div class="card">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=800&q=80" alt="Legislación Laboral">
+                </div>
+                <div class="card-header">
+                    <h3><i class="fas fa-briefcase"></i> Legislación Laboral</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="law-list">
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Código del Trabajo</div>
+                                <div class="law-description">Norma principal que regula las relaciones laborales, derechos y obligaciones de empleadores y trabajadores.</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Ley de Seguridad Social</div>
+                                <div class="law-description">Establece el sistema de protección social para los trabajadores y sus familias.</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Ley General de Higiene y Seguridad del Trabajo</div>
+                                <div class="law-description">Normas para garantizar condiciones laborales seguras y saludables.</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Ley 737 del Sector Público</div>
+                                <div class="law-description">Regula el empleo público y la función pública en Nicaragua.</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a href="http://legislacion.asamblea.gob.ni/Normaweb.nsf/(All)/FA251B3C54F5BAEF062571C40055736C?OpenDocument" target="_blank" rel="noopener" class="law-link">Ver Código del Trabajo <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-img">
+                    <img src="derecho.png/Imagen de WhatsApp 2025-08-02 a las 21.42.40_fdaf7511.jpg" alt="Tratados Internacionales">
+                </div>
+                <div class="card-header">
+                    <h3><i class="fas fa-globe"></i> Tratados Internacionales</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="law-list">
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Convenios de la OIT</div>
+                                <div class="law-description">Ratificación de tratados internacionales laborales que garantizan derechos fundamentales de los trabajadores.</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Convenio 87 sobre Libertad Sindical</div>
+                                <div class="law-description">Reconoce el derecho de los trabajadores a organizarse y negociar colectivamente.</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="law-item">
+                                <div class="law-title">Convenio 98 sobre Derecho de Sindicación y Negociación Colectiva</div>
+                                <div class="law-description">Protege el derecho de los trabajadores a la negociación colectiva y la protección contra actos de discriminación sindical.</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a href="https://share.google/hK0S2u82tzaJ1m1ZW" target="_blank" rel="noopener" class="law-link">Ver Convenios OIT <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- Botón Ir arriba -->
+        <button id="scrollTopBtn" title="Ir arriba"><i class="fas fa-arrow-up"></i></button>
+
+        <!-- Script de interactividad -->
+        <script>
+        // Menú hamburguesa
+        const hamburger = document.getElementById('hamburger-menu');
+        const navUl = document.querySelector('nav ul');
+        hamburger.addEventListener('click', () => {
+            navUl.classList.toggle('open');
+        });
+
+        // Botón cohete para mostrar/ocultar leyes relevantes
+        const toggleLeyesBtn = document.getElementById('toggleLeyesBtn');
+        const leyesSection = document.getElementById('leyesImportantesSection');
+        toggleLeyesBtn.addEventListener('click', () => {
+            leyesSection.style.display = leyesSection.style.display === 'none' ? 'block' : 'none';
+            toggleLeyesBtn.classList.toggle('active');
+        });
+
+        // Botón Ir arriba
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollTopBtn.style.display = 'block';
+            } else {
+                scrollTopBtn.style.display = 'none';
+            }
+        });
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Buscador y filtros
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const backButton = document.getElementById('back-button');
+        const filtroCategoria = document.getElementById('filtro-categoria');
+        const searchResults = document.getElementById('search-results');
+
+        // Recopilar todas las leyes de todas las secciones
+        function getAllLaws() {
+            let laws = [];
+            // Leyes relevantes (periodico-noticia)
+            document.querySelectorAll('.periodico-noticia').forEach(item => {
+                laws.push({
+                    title: item.querySelector('.periodico-titulo')?.textContent || '',
+                    desc: item.querySelector('.periodico-resumen')?.textContent || '',
+                    link: item.querySelector('.periodico-link')?.href || '',
+                    categoria: item.querySelector('.periodico-categoria')?.textContent.toLowerCase() || ''
+                });
+            });
+            // Leyes de las cards (law-list)
+            document.querySelectorAll('.cards-container .card').forEach(card => {
+                let cardCategoria = card.closest('.cards-container')?.previousElementSibling?.querySelector('h2')?.textContent?.toLowerCase() || '';
+                card.querySelectorAll('.law-list li').forEach(li => {
+                    laws.push({
+                        title: li.querySelector('.law-title')?.textContent || '',
+                        desc: li.querySelector('.law-description')?.textContent || '',
+                        link: card.querySelector('.law-link')?.href || '',
+                        categoria: cardCategoria
+                    });
+                });
+            });
+            return laws;
+        }
+
+        function renderResults(results) {
+            if (results.length === 0) {
+                searchResults.innerHTML = '<p>No se encontraron resultados.</p>';
+            } else {
+                searchResults.innerHTML = results.map(law => `
+                    <div class="card" style="margin-bottom:1.2em;">
+                        <div class="card-header"><h3>${law.title}</h3></div>
+                        <div class="card-body">${law.desc}</div>
+                        ${law.link ? `<div class="card-footer"><a href="${law.link}" target="_blank" class="law-link">Ver documento <i class="fas fa-arrow-right"></i></a></div>` : ''}
+                        ${law.categoria ? `<div style="padding:8px 18px; color:#7f53ac; font-weight:700;">${law.categoria.charAt(0).toUpperCase() + law.categoria.slice(1)}</div>` : ''}
+                    </div>
+                `).join('');
+            }
+            searchResults.style.display = 'block';
+            backButton.style.display = 'inline-block';
+        }
+
+        function hideResults() {
+            searchResults.style.display = 'none';
+            backButton.style.display = 'none';
+        }
+
+        searchButton.addEventListener('click', () => {
+            const query = searchInput.value.trim().toLowerCase();
+            const categoria = filtroCategoria.value.trim().toLowerCase();
+            const laws = getAllLaws();
+            const filtered = laws.filter(law => {
+                const matchText = law.title.toLowerCase().includes(query) || law.desc.toLowerCase().includes(query);
+                const matchCat = !categoria || law.categoria.includes(categoria);
+                return matchText && matchCat;
+            });
+            renderResults(filtered);
+        });
+
+        backButton.addEventListener('click', () => {
+            hideResults();
+            searchInput.value = '';
+            filtroCategoria.value = '';
+        });
+
+        // Filtro por categoría
+        filtroCategoria.addEventListener('change', () => {
+            if (searchInput.value.trim() !== '') {
+                searchButton.click();
+            }
+        });
+
+        // Enter en el input activa búsqueda
+        searchInput.addEventListener('keydown', e => {
+            if (e.key === 'Enter') searchButton.click();
+        });
+        hideResults();
+        </script>
+        <!-- Fin del contenido principal -->
+    </body>
+    <!-- Pie de página profesional -->
+    <footer class="footer-profesional">
+        <div class="footer-content-flex">
+            <div class="footer-info">
+                <strong>Biblioteca de Derecho UML Ocotal</strong><br>
+                &copy; 2025 Universidad Martin Lutero. Todos los derechos reservados.
+            </div>
+            <div class="footer-links-flex">
+                <a href="mailto:contacto@uml.edu.ni" class="footer-link"><i class="fas fa-envelope"></i> Contacto</a> |
+                <a href="#" class="footer-link"><i class="fas fa-user-shield"></i> Política de privacidad</a>
+            </div>
+        </div>
+    </footer>
+    <!-- Fin del pie de página -->
+    <style>
+        /* Mejoras visuales generales */
+        body {
+            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: linear-gradient(90deg, #003366 0%, #7f53ac 100%);
+            color: #fff;
+            padding: 2em 0 1em 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        .section-title h2 {
+            font-size: 2.2em;
+            color: #7f53ac;
+            margin-bottom: 0.5em;
+            letter-spacing: 1px;
+        }
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            background: #fff;
+            margin-bottom: 1.5em;
+            transition: box-shadow 0.2s;
+        }
+        .card:hover {
+            box-shadow: 0 16px 32px rgba(127,83,172,0.12);
+        }
+        .card-header {
+            background: linear-gradient(90deg, #003366 0%, #7f53ac 100%);
+            color: #fff;
+            border-radius: 12px 12px 0 0;
+            padding: 1em;
+        }
+        .card-footer {
+            background: #f1f1f1;
+            border-radius: 0 0 12px 12px;
+            padding: 0.8em 1em;
+        }
+        .law-link {
+            color: #7f53ac;
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .law-link:hover {
+            color: #003366;
+            text-decoration: underline;
+        }
+        .search-container input {
+            border-radius: 8px;
+            border: 1px solid #7f53ac;
+            padding: 0.7em;
+            font-size: 1em;
+            margin-right: 0.5em;
+        }
+        .search-container button {
+            background: linear-gradient(90deg, #7f53ac 0%, #003366 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 0.7em 1.5em;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .search-container button:hover {
+            background: #D4AF37;
+            color: #003366;
+        }
+        @media (max-width: 700px) {
+            .footer-content-flex { flex-direction: column; text-align: center; }
+            .footer-info, .footer-links-flex { text-align: center; margin-bottom: 1em; }
+            .footer-links-flex { font-size: 1em; }
+            .card-header, .card-footer { font-size: 1em; }
+        }
+        @media (max-width: 500px) {
+            .footer-profesional {
+                padding: 1em 0;
+                font-size: 0.95em;
+            }
+            .footer-content-flex {
+                padding: 0 0.5em;
+            }
+            .section-title h2, .card-header h3 {
+                font-size: 1.2em;
+                padding: 0.2em 0.5em;
+            }
+            .card {
+                margin-bottom: 1em;
+                padding: 0.5em;
+            }
+            .card-img img {
+                height: 120px;
+                object-fit: cover;
+            }
+            .search-container input, .search-container button {
+                font-size: 0.95em;
+                padding: 0.5em 1em;
+            }
+        }
+    </style>
+</html>
